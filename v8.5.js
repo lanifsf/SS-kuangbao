@@ -380,7 +380,11 @@ export default {
     
     if (init.length > 0) up.push(init);
     
-    server.addEventListener('message', e => up.push(new Uint8Array(e.data)));
+    server.addEventListener('message', e => {
+      if (e.data instanceof ArrayBuffer) {
+        up.push(new Uint8Array(e.data));
+      }
+    });
     server.addEventListener('close', () => state.kill());
     server.addEventListener('error', () => state.kill());
     
